@@ -41,6 +41,10 @@ module FoodCritic
       rules.last.provider = block
     end
 
+    def resource(&block)
+      rules.last.resource = block
+    end
+
     # Define a matcher that will be passed the cookbook path with this method.
     #
     # @param [block] block Your implemented matcher that returns a match Hash.

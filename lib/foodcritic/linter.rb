@@ -57,8 +57,10 @@ module FoodCritic
         cookbook_dir = Pathname.new(File.join(File.dirname(file), '..')).cleanpath
         ast = read_file(file)
         @rules.select{|rule| tag_expr.eval(rule.tags)}.each do |rule|
-          rule_matches = matches(rule.recipe, ast, file)
+          rule_matches = []
+          rule_matches += matches(rule.recipe, ast, file) if File.basename(File.dirname(file)) == 'recipes'
           rule_matches += matches(rule.provider, ast, file) if File.basename(File.dirname(file)) == 'providers'
+          rule_matches += matches(rule.resource, ast, file) if File.basename(File.dirname(file)) == 'resources'
           rule_matches += matches(rule.cookbook, cookbook_dir) if last_dir != cookbook_dir
           rule_matches.each do |match|
             warnings << Warning.new(rule, {:filename => file}.merge(match))
